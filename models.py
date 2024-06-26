@@ -1,15 +1,21 @@
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, Date, DateTime, ForeignKey, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
-from config import DB_HOST, DB_NAME, DB_USER, DB_PASS
+from config import (DB_HOST, DB_NAME, DB_USER, DB_PASS,
+                    DB_CLOUD_user, DB_CLOUD_password, DB_CLOUD_host, DB_CLOUD_port, DB_CLOUD_dbname)
 
 # Определяем базовый класс
 Base = declarative_base()
 
 # Создаем движок и сессию
-DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}"
+#DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}"
+DATABASE_URL = (f"postgresql+psycopg2:"
+                f"//{DB_CLOUD_user}:{DB_CLOUD_password}@{DB_CLOUD_host}:{DB_CLOUD_port}/{DB_CLOUD_dbname}")
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+
 
 # Определяем модели
 class Group(Base):

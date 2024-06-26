@@ -5,9 +5,9 @@ requests==2.31.0
 Pillow==9.5.0
 botocore==1.29.14
 SQLAlchemy==1.4.41
-streamlit==1.18.1
+streamlit
 pandas==1.5.2
-st-aggrid==0.3.0
-streamlit-option-menu==0.3.2
-streamlit-quill==0.1.0
+streamlit-aggrid
+streamlit-option-menu
+streamlit-quill
 langchain==0.0.122

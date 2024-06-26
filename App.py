@@ -1,7 +1,7 @@
 from datetime import datetime
 import random
 from langchain.schema import HumanMessage
-from langchain.chat_models.gigachat import GigaChat
+from langchain_community.chat_models.gigachat import GigaChat
 from st_aggrid import AgGrid, GridOptionsBuilder
 from streamlit_option_menu import option_menu
 import pandas as pd
@@ -13,11 +13,14 @@ from botocore.client import Config
 from sqlalchemy import create_engine, text, func, Integer, cast, and_, distinct
 from sqlalchemy.orm import sessionmaker
 from streamlit_quill import st_quill
-from models import (Base, Student, Group, Teacher, StudentLesson, Lesson, Test, TestQuest, Quest, OptionKey, OptionValue)
+from models import (Base, Student, Group, Teacher, StudentLesson, Lesson, Test, TestQuest, Quest, OptionKey,
+                    OptionValue)
 from config import (DB_HOST, DB_NAME, DB_USER, DB_PASS, SALT, path_to_folder, YANDEX_CLOUD_KEY_ID,
-                    YANDEX_CLOUD_SECRET_KEY, YANDEX_BUCKET_NAME, END_POINT_URL, AUTH_DATA_GIGACHAT)
+                    YANDEX_CLOUD_SECRET_KEY, YANDEX_BUCKET_NAME, END_POINT_URL, AUTH_DATA_GIGACHAT, DB_CLOUD_user,
+                    DB_CLOUD_password, DB_CLOUD_host,DB_CLOUD_port, DB_CLOUD_dbname)
 
-DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}"
+DATABASE_URL = (f"postgresql+psycopg2:"
+                f"//{DB_CLOUD_user}:{DB_CLOUD_password}@{DB_CLOUD_host}:{DB_CLOUD_port}/{DB_CLOUD_dbname}")
 engine = create_engine(DATABASE_URL, pool_size=20, max_overflow=30)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
