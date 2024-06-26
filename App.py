@@ -15,12 +15,16 @@ from sqlalchemy.orm import sessionmaker
 from streamlit_quill import st_quill
 from models import (Base, Student, Group, Teacher, StudentLesson, Lesson, Test, TestQuest, Quest, OptionKey,
                     OptionValue)
-from config import (DB_HOST, DB_NAME, DB_USER, DB_PASS, path_to_folder, YANDEX_CLOUD_KEY_ID,
-                    YANDEX_CLOUD_SECRET_KEY, YANDEX_BUCKET_NAME, END_POINT_URL, AUTH_DATA_GIGACHAT, DB_CLOUD_user,
-                    DB_CLOUD_password, DB_CLOUD_host,DB_CLOUD_port, DB_CLOUD_dbname)
+# from config import (path_to_folder, YANDEX_CLOUD_KEY_ID,
+#                   YANDEX_CLOUD_SECRET_KEY, YANDEX_BUCKET_NAME, END_POINT_URL, AUTH_DATA_GIGACHAT, DB_CLOUD_user,
+#                   DB_CLOUD_password, DB_CLOUD_host,DB_CLOUD_port, DB_CLOUD_dbname)
+
+YANDEX_BUCKET_NAME = st.secrets['YANDEX_BUCKET_NAME']
+END_POINT_URL = st.secrets['END_POINT_URL']
+
 
 DATABASE_URL = (f"postgresql+psycopg2:"
-                f"//{DB_CLOUD_user}:{DB_CLOUD_password}@{DB_CLOUD_host}:{DB_CLOUD_port}/{DB_CLOUD_dbname}")
+                f"//{st.secrets['DB_CLOUD_user']}:{st.secrets['DB_CLOUD_password']}@{st.secrets['DB_CLOUD_host']}:{st.secrets['DB_CLOUD_port']}/{st.secrets['DB_CLOUD_dbname']}")
 engine = create_engine(DATABASE_URL, pool_size=20, max_overflow=30)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -30,15 +34,15 @@ SALT = b'$2b$12$K1Q8Jf5U6s9bJ8qE6dEVOe'
 
 s3 = boto3.client(
     's3',
-    endpoint_url=END_POINT_URL,
-    aws_access_key_id=YANDEX_CLOUD_KEY_ID,
-    aws_secret_access_key=YANDEX_CLOUD_SECRET_KEY,
+    endpoint_url=st.secrets['END_POINT_URL'],
+    aws_access_key_id=st.secrets['YANDEX_CLOUD_KEY_ID'],
+    aws_secret_access_key=st.secrets['YANDEX_CLOUD_SECRET_KEY'],
     config=Config(signature_version='s3v4'),
     region_name='ru-central1'  # Регион Yandex Cloud
 )
 
 
-auth = AUTH_DATA_GIGACHAT
+auth = st.secrets['AUTH_DATA_GIGACHAT']
 
 
 # Функция для получения сессии
@@ -174,7 +178,7 @@ def generate_question_image_submit():
 
 def upload_image_to_yandex_cloud(image_data, image_name):
     unique_filename = str(uuid.uuid4()) + "_" + image_name
-    path_to_file = f"{path_to_folder}{unique_filename}"
+    path_to_file = f"{st.secrets['path_to_folder']}{unique_filename}"
     try:
         s3.put_object(Bucket=YANDEX_BUCKET_NAME, Key=path_to_file, Body=image_data)
         image_url = f"{END_POINT_URL}/{YANDEX_BUCKET_NAME}/{path_to_file}"
