@@ -1,5 +1,7 @@
 from datetime import datetime
 import random
+
+import langchain.schema
 from langchain.schema import HumanMessage
 from langchain_community.chat_models.gigachat import GigaChat
 from st_aggrid import AgGrid, GridOptionsBuilder
@@ -619,7 +621,7 @@ def show_lecture_page_teacher():
         for lecture in lectures:
             if st.button(f'{lecture.name}', key=f'{lecture.lesson_id} {lecture.lesson_id} + '):
                 message = f'Ты ведешь лекции в университете, расскажи лекцию на тему {lecture.name}'
-                msg = [HumanMessage(f'{message}')]
+                msg = [langchain.schema.HumanMessage(f'{message}')]
                 giga = GigaChat(
                     credentials=auth,
                     model='GigaChat:latest',
