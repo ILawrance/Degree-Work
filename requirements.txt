@@ -12,4 +12,6 @@ streamlit-option-menu
 streamlit-quill
 langchain==0.0.122
 langchain_community
+langchain.schema
+langchain_community.chat_models.gigachat
 psycopg2-binary
