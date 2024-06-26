@@ -11,3 +11,4 @@ streamlit-aggrid
 streamlit-option-menu
 streamlit-quill
 langchain==0.0.122
+langchain_community
