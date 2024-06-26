@@ -10,6 +10,11 @@ pandas==1.5.2
 streamlit-aggrid
 streamlit-option-menu
 streamlit-quill
-langchain
-langchain_community
+langchain==0.0.122
+langchain-community==0.2.4
+langchain-text-splitters==0.2.1
+langchain-core==0.2.5
+gigachain==0.2.0
+gigachain-core==0.2.0.1
+gigachain-text-splitters==0.2.0
 psycopg2-binary
