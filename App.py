@@ -15,7 +15,7 @@ from sqlalchemy.orm import sessionmaker
 from streamlit_quill import st_quill
 from models import (Base, Student, Group, Teacher, StudentLesson, Lesson, Test, TestQuest, Quest, OptionKey,
                     OptionValue)
-from config import (DB_HOST, DB_NAME, DB_USER, DB_PASS, SALT, path_to_folder, YANDEX_CLOUD_KEY_ID,
+from config import (DB_HOST, DB_NAME, DB_USER, DB_PASS, path_to_folder, YANDEX_CLOUD_KEY_ID,
                     YANDEX_CLOUD_SECRET_KEY, YANDEX_BUCKET_NAME, END_POINT_URL, AUTH_DATA_GIGACHAT, DB_CLOUD_user,
                     DB_CLOUD_password, DB_CLOUD_host,DB_CLOUD_port, DB_CLOUD_dbname)
 
@@ -25,6 +25,8 @@ engine = create_engine(DATABASE_URL, pool_size=20, max_overflow=30)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base.metadata.create_all(bind=engine)
+
+SALT = b'$2b$12$K1Q8Jf5U6s9bJ8qE6dEVOe'
 
 s3 = boto3.client(
     's3',
