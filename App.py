@@ -1,6 +1,5 @@
 from datetime import datetime
 import random
-
 import langchain.schema
 from langchain.schema import HumanMessage
 from langchain_community.chat_models.gigachat import GigaChat
@@ -8,7 +7,10 @@ from st_aggrid import AgGrid, GridOptionsBuilder
 from streamlit_option_menu import option_menu
 import pandas as pd
 import streamlit as st
-import boto3, bcrypt, uuid, requests
+import boto3
+import bcrypt
+import uuid
+import requests
 from PIL import Image
 from io import BytesIO
 from botocore.client import Config
@@ -26,7 +28,8 @@ END_POINT_URL = st.secrets['END_POINT_URL']
 
 
 DATABASE_URL = (f"postgresql+psycopg2:"
-                f"//{st.secrets['DB_CLOUD_user']}:{st.secrets['DB_CLOUD_password']}@{st.secrets['DB_CLOUD_host']}:{st.secrets['DB_CLOUD_port']}/{st.secrets['DB_CLOUD_dbname']}")
+                f"//{st.secrets['DB_CLOUD_user']}:{st.secrets['DB_CLOUD_password']}@{st.secrets['DB_CLOUD_host']}:"
+                f"{st.secrets['DB_CLOUD_port']}/{st.secrets['DB_CLOUD_dbname']}")
 engine = create_engine(DATABASE_URL, pool_size=20, max_overflow=30)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -66,6 +69,7 @@ if "blocks" not in st.session_state:
     st.session_state.blocks = []
 if 'editor_content' not in st.session_state:
     st.session_state.editor_content = ""
+
 
 def fetch_image_from_url(image_url):
     try:
@@ -461,7 +465,6 @@ def generate_lecture_constructor():
             st.success("Лекция добавлена")
 
 
-
 def show_registration_page():
     st.sidebar.radio("Навигация", ["Вход"])
     # Выбор между регистрацией и авторизацией
@@ -589,7 +592,6 @@ def show_lecture_page_teacher():
         counter = 1
         menu_options = [f'{lecture.name}' for lecture in lectures]
 
-
         selected_lecture = option_menu(
             "Список лекций",
             menu_options,
@@ -602,7 +604,6 @@ def show_lecture_page_teacher():
             if selected_lecture == f'{lecture.name}':
                 st.markdown(lecture.text_material, unsafe_allow_html=True)
                 st.write("<hr>", unsafe_allow_html=True)
-
 
         for lecture in lectures:
             if st.button(f'Удалить лекцию {lecture.name}', key=f'({lecture.lesson_id} + {counter}'):
@@ -734,7 +735,6 @@ def show_tests_page_stud():
                         st.session_state.questions = []
             else:
                 pass
-
 
 
 # Страница тестов учителя
@@ -1001,7 +1001,8 @@ def show_statistic_stud():
     )
     db = next(get_db())
     const_suc = 2
-    count_lectures = db.query(func.count(distinct(StudentLesson.lesson_id))).filter_by(student_id=user.student_id).scalar()
+    count_lectures = (db.query(func.count(distinct(StudentLesson.lesson_id))).
+                      filter_by(student_id=user.student_id).scalar())
     count_all_lectures = db.query(func.count(Lesson.lesson_id)).scalar()
     count_attempts = db.query(func.count(Test.test_id)).filter_by(student_id=user.student_id).scalar()
     count_success_attempts = db.query(func.count(Test.test_id)).filter(
